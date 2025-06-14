@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Liste des cours</h3>
+    <a href="{% url 'ajouter_cours' %}" class="btn btn-primary mb-2">Ajouter un cours</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Professeur</th>
+                <th>Classe</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cours in cours %}
+            <tr>
+                <td>{{ cours.nom }}</td>
+                <td>{{ cours.professeur.utilisateur.get_full_name }}</td>
+                <td>{{ cours.classe.nom }}</td>
+                <td>
+                    <a href="{% url 'modifier_cours' cours.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                    <a href="{% url 'supprimer_cours' cours.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucun cours trouvé.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

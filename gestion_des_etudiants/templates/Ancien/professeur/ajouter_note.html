@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Ajouter les notes pour {{ etudiant.nom }} {{ etudiant.prenom }} - {{ cours.nom }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="session" class="form-label">Session</label>
+            <select class="form-select" id="session" name="session" required>
+                <option value="session1">Session 1</option>
+                <option value="session2">Session 2</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="note1" class="form-label">Note 1 / 10</label>
+            <input type="number" class="form-control" id="note1" name="note1" min="0" max="10" step="0.01" required>
+        </div>
+        <div class="mb-3">
+            <label for="note2" class="form-label">Note 2 / 10</label>
+            <input type="number" class="form-control" id="note2" name="note2" min="0" max="10" step="0.01" required>
+        </div>
+        <div class="mb-3">
+            <label for="note3" class="form-label">Note 3 / 10</label>
+            <input type="number" class="form-control" id="note3" name="note3" min="0" max="10" step="0.01" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter les notes</button>
+        <a href="{% url 'liste_etudiants' %}" class="btn btn-secondary ms-2">Annuler</a>
+    </form>
+</div>
+{% endblock %}

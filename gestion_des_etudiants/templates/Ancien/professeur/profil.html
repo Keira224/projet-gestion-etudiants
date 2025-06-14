@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-primary">Mon profil</h2>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Nom :</strong> {{ professeur.utilisateur.last_name }}</li>
+        <li class="list-group-item"><strong>Prénom :</strong> {{ professeur.utilisateur.first_name }}</li>
+        <li class="list-group-item"><strong>Spécialité :</strong> {{ professeur.specialite }}</li>
+        <li class="list-group-item"><strong>Téléphone :</strong> {{ professeur.telephone }}</li>
+    </ul>
+    <a href="{% url 'modifier_professeur' %}" class="btn btn-primary mt-3">Modifier mes informations</a>
+    <a href="{% url 'dashboard_prof' %}" class="btn btn-secondary mt-3">Retour</a>
+</div>
+{% endblock %}

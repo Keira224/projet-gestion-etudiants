@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Professeur</title>
+</head>
+<body>
+    <h2>Bienvenue, Professeur {{ professeur.nom }} {{ professeur.prenom }}</h2>
+
+    <h3>Informations personnelles</h3>
+    <ul>
+        <li>Email : {{ professeur.email }}</li>
+        <li>Date de naissance : {{ professeur.date_naissance }}</li>
+        <li>Spécialité : {{ professeur.specialite }}</li>
+        <li>Téléphone : {{ professeur.telephone }}</li>
+    </ul>
+
+    <p><a href="{% url 'logout' %}">Se déconnecter</a></p>
+</body>
+</html>

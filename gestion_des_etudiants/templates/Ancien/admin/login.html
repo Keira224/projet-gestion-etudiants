@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2>Connexion Administrateur</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Nom d'utilisateur</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Connexion</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger mt-3">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-primary">Ajouter un créneau à l'emploi du temps</h2>
+    <form method="post" class="card p-4 shadow-sm" style="max-width: 500px;">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="jour" class="form-label">Jour</label>
+            <input type="text" class="form-control" id="jour" name="jour" required>
+        </div>
+        <div class="mb-3">
+            <label for="heure_debut" class="form-label">Heure de début</label>
+            <input type="time" class="form-control" id="heure_debut" name="heure_debut" required>
+        </div>
+        <div class="mb-3">
+            <label for="heure_fin" class="form-label">Heure de fin</label>
+            <input type="time" class="form-control" id="heure_fin" name="heure_fin" required>
+        </div>
+        <div class="mb-3">
+            <label for="cours" class="form-label">Cours</label>
+            <select class="form-select" id="cours" name="cours" required>
+                {% for c in cours %}
+                    <option value="{{ c.id }}">{{ c.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a href="{% url 'dashboard_prof' %}" class="btn btn-secondary ms-2">Annuler</a>
+    </form>
+</div>
+{% endblock %}

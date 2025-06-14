@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de bord Professeur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap + Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar-brand i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Barre de navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-person-badge"></i> Espace Professeur
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-house"></i> Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4">Bienvenue, {{ professeur.prenom }}  {{ professeur.nom }}</h2>
+
+    {% if message %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+
+    <!-- Informations personnelles -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="bi bi-person-lines-fill"></i> Informations personnelles</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Nom :</strong> {{ professeur.nom }} {{ professeur.prenom }}</li>
+            <li class="list-group-item"><strong>Email :</strong> {{ professeur.email }}</li>
+            <li class="list-group-item"><strong>Téléphone :</strong> {{ professeur.telephone }}</li>
+            <li class="list-group-item"><strong>Spécialité :</strong> {{ professeur.specialite }}</li>
+            <li class="list-group-item"><strong>Date de naissance :</strong> {{ professeur.date_naissance }}</li>
+        </ul>
+    </div>
+
+    <!-- Mes cours -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h5><i class="bi bi-journal-bookmark-fill"></i> Mes Cours</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for cours in cours_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ cours.nom }}</span>
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="cours_id" value="{{ cours.id }}">
+                    <input type="text" name="nom_cours" class="form-control form-control-sm" placeholder="Modifier nom" required>
+                    <button type="submit" name="modifier_cours" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </form>
+            </li>
+            {% empty %}
+            <li class="list-group-item">Aucun cours pour le moment.</li>
+            {% endfor %}
+        </ul>
+        <div class="card-body">
+            <form method="post" class="d-flex gap-2">
+                {% csrf_token %}
+                <input type="text" name="nom_cours" placeholder="Nouveau cours" class="form-control" required>
+                <button type="submit" name="ajouter_cours" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Ajouter un cours
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ajouter une note -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5><i class="bi bi-pencil-fill"></i> Ajouter / Modifier une Note</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label">Étudiant</label>
+                    <select name="etudiant_id" class="form-select" required>
+                        <option value="">--Choisir--</option>
+                        {% for etudiant in etudiants %}
+                        <option value="{{ etudiant.id }}">{{ etudiant.nom }} {{ etudiant.prenom }} ({{ etudiant.matricule }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cours</label>
+                    <select name="cours_id_note" class="form-select" required>
+                        <option value="">--Choisir--</option>
+                        {% for cours in cours_list %}
+                        <option value="{{ cours.id }}">{{ cours.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Session</label>
+                    <select name="session" class="form-select" required>
+                        {% for code, libelle in session_choices %}
+                        <option value="{{ code }}">{{ libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Note 1</label>
+                    <input type="number" step="0.01" name="note1" class="form-control" min="0" max="20">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Note 2</label>
+                    <input type="number" step="0.01" name="note2" class="form-control" min="0" max="20">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Note 3</label>
+                    <input type="number" step="0.01" name="note3" class="form-control" min="0" max="20">
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" name="ajouter_note" class="btn btn-success">
+                        <i class="bi bi-save"></i> Enregistrer la note
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des notes -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-secondary text-white">
+            <h5><i class="bi bi-table"></i> Notes des étudiants</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Étudiant</th>
+                            <th>Cours</th>
+                            <th>Session</th>
+                            <th>Note 1</th>
+                            <th>Note 2</th>
+                            <th>Note 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes_list %}
+                        <tr>
+                            <td>{{ note.etudiant.nom }} {{ note.etudiant.prenom }}</td>
+                            <td>{{ note.cours.nom }}</td>
+                            <td>{{ note.get_session_display }}</td>
+                            <td>{{ note.note1|default:"-" }}</td>
+                            <td>{{ note.note2|default:"-" }}</td>
+                            <td>{{ note.note3|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucune note enregistrée.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Section Emploi du temps -->
+<h3>Ajouter un créneau d'emploi du temps</h3>
+<form method="post" class="row g-3 mb-4">
+    {% csrf_token %}
+    <div class="col-md-4">
+        <label for="cours_id_emploi" class="form-label">Cours</label>
+        <select name="cours_id_emploi" id="cours_id_emploi" class="form-select" required>
+            <option value="">--Choisir un cours--</option>
+            {% for cours in cours_list %}
+                <option value="{{ cours.id }}">{{ cours.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="jour" class="form-label">Jour</label>
+        <input type="text" name="jour" id="jour" class="form-control" placeholder="Lundi" required>
+    </div>
+    <div class="col-md-2">
+        <label for="heure_debut" class="form-label">Heure début</label>
+        <input type="time" name="heure_debut" id="heure_debut" class="form-control" required>
+    </div>
+    <div class="col-md-2">
+        <label for="heure_fin" class="form-label">Heure fin</label>
+        <input type="time" name="heure_fin" id="heure_fin" class="form-control" required>
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button type="submit" name="ajouter_emploi" class="btn btn-info w-100">
+            <i class="bi bi-calendar-plus"></i> Ajouter
+        </button>
+    </div>
+</form>
+<!-- ... tête de tableau ... -->
+<thead class="table-light">
+    <tr>
+        <th>Jour</th>
+        <th>Heure début</th>
+        <th>Heure fin</th>
+        <th>Cours</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
+    </tr>
+</thead>
+<tbody>
+    {% for emploi in emplois %}
+    <tr>
+        <td>{{ emploi.jour }}</td>
+        <td>{{ emploi.heure_debut }}</td>
+        <td>{{ emploi.heure_fin }}</td>
+        <td>{{ emploi.cours.nom }}</td>
+        <td>
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="emploi_id" value="{{ emploi.id }}">
+                <input type="text" name="jour" value="{{ emploi.jour }}" class="form-control form-control-sm mb-1" required>
+                <input type="time" name="heure_debut" value="{{ emploi.heure_debut|time:'H:i' }}" class="form-control form-control-sm mb-1" required>
+                <input type="time" name="heure_fin" value="{{ emploi.heure_fin|time:'H:i' }}" class="form-control form-control-sm mb-1" required>
+                <button type="submit" name="modifier_emploi" class="btn btn-sm btn-primary w-100">Modifier</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="emploi_id" value="{{ emploi.id }}">
+                <button type="submit" name="supprimer_emploi" class="btn btn-sm btn-danger w-100">Supprimer</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6" class="text-center">Aucun créneau enregistré.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+
+</div>
+
+<!-- JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

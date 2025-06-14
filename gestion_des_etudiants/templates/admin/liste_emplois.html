@@ -1,0 +1,40 @@
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Emplois du temps</h3>
+    <a href="{% url 'ajouter_emploi' %}" class="btn btn-primary mb-2">Ajouter un emploi du temps</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Jour</th>
+                <th>Heure début</th>
+                <th>Heure fin</th>
+                <th>Cours</th>
+                <th>Professeur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emploi in emplois %}
+            <tr>
+                <td>{{ emploi.jour }}</td>
+                <td>{{ emploi.heure_debut }}</td>
+                <td>{{ emploi.heure_fin }}</td>
+                <td>{{ emploi.cours.nom }}</td>
+                <td>{{ emploi.professeur.utilisateur.get_full_name }}</td>
+                <td>
+                    <a href="{% url 'modifier_emploi' emploi.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                    <a href="{% url 'supprimer_emploi' emploi.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">Aucun emploi du temps trouvé.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

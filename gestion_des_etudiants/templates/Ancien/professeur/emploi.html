@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-primary">Mon emploi du temps</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Jour</th>
+                <th>Heure début</th>
+                <th>Heure fin</th>
+                <th>Cours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in emploi %}
+            <tr>
+                <td>{{ e.jour }}</td>
+                <td>{{ e.heure_debut }}</td>
+                <td>{{ e.heure_fin }}</td>
+                <td>{{ e.cours.nom }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucun créneau enregistré.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'dashboard_prof' %}" class="btn btn-secondary">Retour au tableau de bord</a>
+</div>
+{% endblock %}

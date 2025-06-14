@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-primary">Ajouter un administrateur</h2>
+    <form method="post" class="card p-4 shadow-sm" style="max-width: 500px;">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom</label>
+            <input type="text" class="form-control" id="prenom" name="prenom" required>
+        </div>
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="nom" name="nom" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Créer l'administrateur</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Étudiant</title>
+</head>
+<body>
+    <h2>Bienvenue, {{ etudiant.nom }} {{ etudiant.prenom }}</h2>
+
+    <h3>Informations personnelles</h3>
+    <ul>
+        <li>Nom complet : {{ etudiant.nom }} {{ etudiant.prenom }}</li>
+        <li>Date de naissance : {{ etudiant.date_naissance }}</li>
+        <li>Matricule : {{ etudiant.matricule }}</li>
+        <li>Adresse : {{ etudiant.adresse }}</li>
+        <li>Téléphone : {{ etudiant.telephone }}</li>
+    </ul>
+
+    <h3>Modifier votre classe et département</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label>Classe :</label>
+        <select name="classe" required>
+            {% for classe in classes %}
+                <option value="{{ classe.id }}" {% if etudiant.classe and classe.id == etudiant.classe.id %}selected{% endif %}>
+                    {{ classe.get_nom_display }}
+                </option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Département :</label>
+        <select name="departement" required>
+            {% for dept in departements %}
+                <option value="{{ dept.id }}" {% if etudiant.departement and dept.id == etudiant.departement.id %}selected{% endif %}>
+                    {{ dept.nom }}
+                </option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Mettre à jour</button>
+    </form>
+
+    <p><a href="{% url 'logout' %}">Se déconnecter</a></p>
+</body>
+</html>
