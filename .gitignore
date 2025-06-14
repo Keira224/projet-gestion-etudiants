@@ -1,0 +1,30 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+
+
+# Fichiers Python
+*.pyc
+__pycache__/
+
+# Environnement virtuel
+env/
+venv/
+.venv/
+
+# Fichiers de base de données
+*.sqlite3
+
+# Fichiers secrets
+*.env
+
+# Dossiers Django
+/staticfiles/
+/media/
+
+# IDE
+.vscode/
+.idea/
+
+# Migrations
+**/migrations/
+!**/migrations/__init__.py
+
